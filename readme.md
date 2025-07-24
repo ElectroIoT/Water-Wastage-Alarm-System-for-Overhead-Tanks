@@ -1,69 +1,43 @@
 # 🚰 Water Wastage Alarm System for Overhead Tanks
 
 ## 🧠 Project Overview
-The **Water Wastage Alarm System** is a smart, low-cost solution designed for Indian households to prevent water overflow in overhead tanks. Using an **ultrasonic sensor**, the system monitors the water level in real-time and provides alerts through a **buzzer**, an **OLED display**, and optional **SMS notifications** (via **SIM800L**). This project aims to conserve water and reduce unnecessary electricity wastage by automating the process of monitoring the water level in overhead tanks.
+The **Water Wastage Alarm System** is an automated solution for Indian households designed to prevent water overflow in overhead tanks. The system uses an **ESP32-WROOM** to monitor the water level via an **HC-SR04 ultrasonic sensor**, control the water pump using a **relay module**, and send water level data to **Home Assistant** via **MQTT**. The system is also capable of turning on the pump when the water level falls below 30% and turning it off when the tank is full (above 95%).
 
 ---
 
 ## 🛠️ Features
-- **Real-time Water Level Monitoring:** Using an ultrasonic sensor to measure the distance from the top of the tank to the water surface.
-- **Overflow Detection:** A buzzer sounds when the tank is full (95%+).
-- **OLED Display:** Displays the current water level percentage and the status of the tank.
-- **LED Indicators:** Visual indicators for **Safe**, **Caution**, and **Full** water levels.
-- **Optional SMS Alerts:** Sends an SMS to the user when the tank is full using the **SIM800L** module.
-- **Low Power Consumption:** Designed to run efficiently on minimal power.
-- **Affordable & Compact:** Low-cost components and easy to install in any household.
+- **Real-time Water Level Monitoring:** Uses an ultrasonic sensor to measure water level and display it on an OLED screen.
+- **Overflow Detection:** Triggers a **buzzer** and sends an **SMS alert** when the tank is full.
+- **Home Assistant Integration:** Sends water level data and controls the pump via **MQTT** for remote monitoring and automation.
+- **Automated Pump Control:** Turns on the water pump when the level is low and turns it off when full.
+- **Low Power Consumption:** Designed to operate on minimal power.
+- **Affordable and Easy to Install:** Low-cost components, suitable for all households.
 
 ---
 
-## 🌐 Working Principle
-1. **Water Level Measurement:**  
-   The ultrasonic sensor measures the distance between the top of the tank and the water surface. This distance is then converted to a percentage to represent the current water level.
-
-2. **Overflow Detection:**  
-   If the water level exceeds 95%, the system:
-   - Triggers a **buzzer** alarm.
-   - Sends an **SMS** (optional) using **SIM800L**.
-   - Displays the "FULL" warning on the OLED screen.
-
-3. **Status Indicators:**  
-   The system uses **LEDs** to show the current water level:
-   - **Safe:** Water level below 60%.
-   - **Caution:** Water level between 60% and 95%.
-   - **Full:** Water level above 95%.
-
----
-
-## 🛠️ Components
-| **Component**             | **Description**                                      |
-|---------------------------|------------------------------------------------------|
-| **H2S-Dev Board**         | Main controller (CH32V203 MCU)                       |
-| **HC-SR04 Ultrasonic Sensor** | Used for measuring the water level                  |
-| **OLED 128x64 Display**   | Displays water level and system status               |
-| **SIM800L Module**        | Sends SMS alerts (optional)                          |
-| **Buzzer**                | Sound alarm for overflow                            |
-| **LEDs (3)**              | Visual indicators for safe, caution, and full levels |
-| **5V Regulator**          | Powers the system                                    |
-
----
-
-## 💻 Installation & Setup
+## 🧑‍💻 Installation & Setup
 
 ### 🔧 Hardware Setup:
-1. **H2S-Dev Board:**
-   - Connect the **HC-SR04 ultrasonic sensor** to the **TRIG_PIN** and **ECHO_PIN** on the H2S-Dev board.
-   - Attach the **SIM800L** to pins 7 (RX) and 8 (TX) for communication (if SMS alert functionality is desired).
-   - Wire up the **buzzer** and **LEDs** to the appropriate pins.
+1. **H2S-Dev Board (ESP32-WROOM)**:
+   - **HC-SR04 Ultrasonic Sensor** (for water level detection)
+   - **Relay Module** (for controlling the pump)
+   - **OLED Display** (for displaying water level status)
+   - **Buzzer** (for overflow alert)
 
-2. **OLED Display:**
-   - Connect the **OLED display** to the **I2C pins** (SCL, SDA) on the H2S-Dev Board.
+2. **Connections:**
+   - **HC-SR04**:
+     - TRIG_PIN (5)
+     - ECHO_PIN (18)
+   - **Relay Module** (connected to GPIO 23)
+   - **OLED Display** (connected via I2C, default SDA and SCL pins)
+   - **Buzzer** (connected to GPIO 22)
 
 ### 🧑‍💻 Software Setup:
-1. Install the required libraries:
-   ```bash
-   # For OLED display:
-   $ pip install Adafruit-GFX
-   $ pip install Adafruit_SSD1306
 
-   # For SIM800L communication:
-   $ pip install SoftwareSerial
+1. **Install Libraries:**
+   Install the following libraries in the Arduino IDE:
+   - **ESP32 Board** (Arduino IDE > Preferences > Additional Boards Manager URLs: `https://dl.espressif.com/dl/package_esp32_index.json`)
+   - **PubSubClient** (for MQTT communication)
+   - **Adafruit SSD1306** (for OLED display)
+   - **Adafruit GFX** (for graphics on OLED)
+
